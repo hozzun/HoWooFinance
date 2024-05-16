@@ -36,15 +36,19 @@ INSTALLED_APPS = [
     # 'articles',   # 게시판
     # 'deposits',   # 예금
     # 'savings',    # 적금
+    
+    # regist 관련
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
 
     # plus
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'dj_rest_auth.registration',
+    'corsheaders',
 
     # default
     'django.contrib.admin',
@@ -131,6 +135,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+# 현재 지역대 날짜 시간 설정
+USE_L10N = True
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -145,6 +152,24 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # 유저 등록
 AUTH_USER_MODEL = 'accounts.User'
 
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-
 SITE_ID = 1
+
+# Vue 통신 연동 허용
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+    'http://127.0.0.1:8000',
+]
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'accounts.serializers.UserRegisterSerializer',
+}
+
+# Token
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework.authentication.TokenAuthentication',
+#     ],
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated',
+#     ],
+# }
