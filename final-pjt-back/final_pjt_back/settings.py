@@ -27,13 +27,16 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+REST_AUTH = {
+    'SESSION_LOGIN': True
+}
 
 # Application definition
 
 INSTALLED_APPS = [
     # app 목록
     'accounts',   # 유저
-    # 'articles',   # 게시판
+    'articles',   # 게시판
     # 'deposits',   # 예금
     # 'savings',    # 적금
     
@@ -59,18 +62,23 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-MIDDLEWARE = [
-    # plus
-    'allauth.account.middleware.AccountMiddleware',
+SITE_ID = 1
 
-    # default
+# 유저 등록
+AUTH_USER_MODEL = 'accounts.User'
+
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # plus
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #plus
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'final_pjt_back.urls'
@@ -149,16 +157,12 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# 유저 등록
-AUTH_USER_MODEL = 'accounts.User'
-
-SITE_ID = 1
-
 # Vue 통신 연동 허용
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173',
-    'http://127.0.0.1:8000',
-]
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:5173',
+#     'http://127.0.0.1:8000',
+# ]
+CORS_ALLOW_ALL_ORIGINS = True
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'accounts.serializers.UserRegisterSerializer',
@@ -173,3 +177,19 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 #         'rest_framework.permissions.IsAuthenticated',
 #     ],
 # }
+
+CORS_ALLOW_HEADERS = [
+    'content-disposition',
+    'content-type',
+    'x-csrftoken',
+    'authorization',
+]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]

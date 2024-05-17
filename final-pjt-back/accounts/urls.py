@@ -1,7 +1,7 @@
 from django.urls import path, include
 from .views import UserRegisterView, UserLoginView, UserDetailInfoView, user_info
 
-app_name = 'articles'
+app_name = 'accounts'
 urlpatterns = [
     path('', include('dj_rest_auth.urls')),
     # 회원 가입
