@@ -8,14 +8,13 @@ from django.contrib.auth import get_user_model
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ['pk', 'userid', 'username', 'age', 'gender', 'salary', 'wealth', 'period']
+        fields = ['pk', 'username', 'name', 'age', 'gender', 'salary', 'wealth', 'period']
 
 
 # 회원가입 시리얼라이저
 class UserRegisterSerializer(RegisterSerializer):
     # 필드 확장
-    userid = serializers.CharField(required=False, allow_null=True)
-    username = serializers.CharField(required=False, allow_null=True)
+    name = serializers.CharField(required=False, allow_null=True)
     age = serializers.IntegerField(required=False, allow_null=True)
     gender = serializers.IntegerField(required=False, allow_null=True)
     salary = serializers.IntegerField(required=False, allow_null=True)
@@ -29,8 +28,7 @@ class UserRegisterSerializer(RegisterSerializer):
     def get_cleaned_data(self):
         data = super().get_cleaned_data()
         data.update({
-            'userid': self.validated_data.get('userid', None),
-            'username': self.validated_data.get('username', None),
+            'name': self.validated_data.get('name', None),
             'age': self.validated_data.get('age', None),
             'gender': self.validated_data.get('gender', None),
             'salary': self.validated_data.get('salary', None),
@@ -42,8 +40,7 @@ class UserRegisterSerializer(RegisterSerializer):
     # 데이터 저장(사용자 등록)
     def save(self, request):
         user = super().save(request)
-        user.userid = self.validated_data.get('userid')
-        user.username = self.validated_data.get('username')
+        user.name = self.validated_data.get('name')
         user.age = self.validated_data.get('age')
         user.gender = self.validated_data.get('gender')
         user.salary = self.validated_data.get('salary')
@@ -62,22 +59,22 @@ class UserLoginSerializer(LoginSerializer):
 # 사용자 세부정보(변경) 시리얼라이저
 class UserDetailInfoSerializer(UserDetailsSerializer):
     # 필드 확장
-    username = serializers.CharField(required=False, allow_null=True)
+    name = serializers.CharField(required=False, allow_null=True)
     age = serializers.CharField(required=False, allow_null=True)
     gender = serializers.CharField(required=False, allow_null=True)
     salary = serializers.CharField(required=False, allow_null=True)
     wealth = serializers.CharField(required=False, allow_null=True)
     period = serializers.CharField(required=False, allow_null=True)
     
-    class Meta(UserDetailsSerializer):
+    class Meta(UserDetailsSerializer.Meta):
         model = get_user_model()
-        fields = UserDetailsSerializer.Meta.fields + ('username', 'age', 'gender', 'salary', 'wealth', 'period')
-    
+        fields = ['name', 'age', 'gender', 'salary', 'wealth', 'period']
+
     # 입력된 데이터 유효성 검사 후 가져오기
     def get_cleaned_data(self):
         data = super().get_cleaned_data()
         data.update({
-            'username': self.validated_data.get('username', None),
+            'name': self.validated_data.get('name', None),
             'age': self.validated_data.get('age', None),
             'gender': self.validated_data.get('gender', None),
             'salary': self.validated_data.get('salary', None),
@@ -89,7 +86,7 @@ class UserDetailInfoSerializer(UserDetailsSerializer):
     # 기존 사용자 정보 업데이트
     def update(self, instance, validated_data):
         instance = super().update(instance, validated_data)
-        instance.username = validated_data.get('username', None)
+        instance.name = validated_data.get('name', None)
         instance.age = validated_data.get('age', None)
         instance.gender = validated_data.get('gender', None)
         instance.salary = validated_data.get('salary', None)
