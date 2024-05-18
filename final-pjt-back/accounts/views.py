@@ -21,8 +21,8 @@ class UserLoginView(LoginView):
 
 # 사용자 정보 조회 뷰
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication])
 def user_info(request):
     user = request.user
     serializer = UserSerializer(user)
