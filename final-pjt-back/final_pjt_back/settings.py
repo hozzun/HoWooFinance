@@ -15,6 +15,21 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# API_KEY 환경변수 설정
+import os
+import environ
+
+env = environ.Env(
+    DEBUG=(bool, False)    
+)
+
+environ.Env.read_env(
+    env_file=os.path.join(BASE_DIR, '.env')
+)
+
+API_KEY_DEPOSIT = env('API_KEY_DEPOSIT')
+# API_KEY_MAP = env('API_KEY_MAP')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -37,7 +52,7 @@ INSTALLED_APPS = [
     # app 목록
     'accounts',   # 유저
     'articles',   # 게시판
-    # 'deposits',   # 예금
+    'deposits',   # 예금
     # 'savings',    # 적금
     
     # regist 관련
@@ -169,14 +184,14 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 
 # Token
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.TokenAuthentication',
-#     ],
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticated',
-#     ],
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
 
 CORS_ALLOW_HEADERS = [
     'content-disposition',

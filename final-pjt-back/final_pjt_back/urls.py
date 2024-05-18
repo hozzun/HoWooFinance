@@ -21,6 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('articles/', include('articles.urls')),
-    # path('deposits/', include('deposits.urls')),
+    path('deposits/', include('deposits.urls')),
     # path('savings/', include('savings.urls'))
 ]
