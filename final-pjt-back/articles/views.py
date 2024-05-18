@@ -9,11 +9,11 @@ from .serializers import ArticleListSerializer, ArticleSerializer, CommentSerial
 # Create your views here.
 
 # 게시글 생성 및 목록 조회
-@permission_classes([IsAuthenticated])
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def article_list(request):
     if request.method == 'GET':
-        articles = get_list_or_404(Article)
+        articles = Article.objects.all()
         serializer = ArticleListSerializer(articles, many=True)
         return Response(serializer.data)
     
@@ -54,14 +54,14 @@ def article_detail(request, article_pk):
 # 댓글 목록
 @api_view(['GET'])
 def comment_list(request):
-    comments = get_list_or_404(Comment)
+    comments = Comment.objects.all()
     serializer = CommentSerializer(comments, many=True)
     return Response(serializer.data)
 
 
 # 댓글 생성
-@permission_classes([IsAuthenticated])
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def comment_create(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
     serializer = CommentSerializer(data=request.data)

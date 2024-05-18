@@ -6,8 +6,6 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from .models import User
-from django.contrib.auth.hashers import check_password
 
 # Create your views here.
 
@@ -22,9 +20,9 @@ class UserLoginView(LoginView):
 
 
 # 사용자 정보 조회 뷰
-# @authentication_classes([TokenAuthentication])
-# @permission_classes([IsAuthenticated])
 @api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def user_info(request):
     user = request.user
     serializer = UserSerializer(user)
