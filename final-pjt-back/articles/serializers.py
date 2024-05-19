@@ -13,12 +13,12 @@ class ArticleListSerializer(serializers.ModelSerializer):
 
 # 댓글 시리얼 라이저
 class CommentSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(source='user.username', read_only=True)
-    
+    article_id = serializers.ReadOnlyField(source='article.id')
+    username = serializers.ReadOnlyField(source='user.username')
+
     class Meta:
         model = Comment
-        fields = '__all__'
-        read_only_fields = ('user', 'article', )
+        fields = ('id', 'username', 'content', 'created_at', 'updated_at', 'article_id', )
 
 
 # 게시글 시리얼라이저
@@ -31,4 +31,3 @@ class ArticleSerializer(serializers.ModelSerializer):
         model = Article
         fields = '__all__'
         read_only_fields = ('user', )
-
