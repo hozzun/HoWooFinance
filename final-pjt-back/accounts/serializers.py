@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ['pk', 'username', 'name', 'age', 'gender', 'salary', 'wealth', 'period']
+        fields = ['pk', 'username', 'name', 'age', 'gender', 'salary', 'wealth', 'period', 'deposit']
 
 
 # 회원가입 시리얼라이저
@@ -68,7 +68,7 @@ class UserDetailInfoSerializer(UserDetailsSerializer):
     
     class Meta(UserDetailsSerializer.Meta):
         model = get_user_model()
-        fields = ['name', 'age', 'gender', 'salary', 'wealth', 'period']
+        fields = ['name', 'age', 'gender', 'salary', 'wealth', 'period', 'deposit']
 
     # 입력된 데이터 유효성 검사 후 가져오기
     def get_cleaned_data(self):

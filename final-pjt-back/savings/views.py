@@ -5,18 +5,18 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import DepositProducts, DepositOptions
-from .serializers import DepositProductsSerializer, DepositOptionsSerializer
+from .models import SavingProducts, SavingOptions
+from .serializers import SavingProductsSerializer, SavingOptionsSerializer
 
 # Create your views here.
 API_KEY = settings.API_KEY_DEPOSIT
 BASE_URL = 'http://finlife.fss.or.kr/finlifeapi/'
 
 
-# 정기예금 상품 DB에 저장
+# 적금 상품 DB에 저장
 @api_view(['GET'])
-def save_deposit_products(request):
-    URL = BASE_URL + 'depositProductsSearch.json'
+def save_saving_products(request):
+    URL = BASE_URL + 'savingProductsSearch.json'
     context = {
         'auth': API_KEY,
         'topFinGrpNo': '020000',
@@ -39,17 +39,17 @@ def save_deposit_products(request):
             'etc_note': base.get('etc_note'),
         }
 
-        product_serializer = DepositProductsSerializer(data=save_base_data)
+        product_serializer = SavingProductsSerializer(data=save_base_data)
         if product_serializer.is_valid(raise_exception=True):
             product_serializer.save()
 
-    return JsonResponse({"message": "정기예금 상품 저장완료."}) 
+    return JsonResponse({"message": "적금 상품 저장완료."}) 
 
 
-# 정기예금 상품옵션 DB에 저장
+# 적금 상품옵션 DB에 저장
 @api_view(['GET'])
-def save_deposit_options(request):
-    URL = BASE_URL + 'depositProductsSearch.json'
+def save_saving_options(request):
+    URL = BASE_URL + 'savingProductsSearch.json'
     context = {
         'auth': API_KEY,
         'topFinGrpNo': '020000',
@@ -64,8 +64,8 @@ def save_deposit_options(request):
 
         # 해당 상품이 존재하는지 확인
         try:
-            product = DepositProducts.objects.get(fin_prdt_cd=fin_prdt_cd)
-        except DepositProducts.DoesNotExist:
+            product = SavingProducts.objects.get(fin_prdt_cd=fin_prdt_cd)
+        except SavingProducts.DoesNotExist:
             continue
         
         save_option_data = {
@@ -75,23 +75,23 @@ def save_deposit_options(request):
             'save_trm': option.get('save_trm'),
         }
 
-        option_serializer = DepositOptionsSerializer(data=save_option_data)
+        option_serializer = SavingOptionsSerializer(data=save_option_data)
         if option_serializer.is_valid(raise_exception=True):
             option_serializer.save(fin_prdt_cd=product)
 
-    return JsonResponse({"message": "정기예금 옵션 저장완료."}) 
+    return JsonResponse({"message": "적금 옵션 저장완료."}) 
 
 
-# (정기예금)전체 상품 목록 조회 및 추가
+# (적금)전체 상품 목록 조회 및 추가
 @api_view(['GET', 'POST'])
-def deposit_products(request):
+def saving_products(request):
     if request.method == 'GET':
-        products = DepositProducts.objects.all()
-        serializer = DepositProductsSerializer(products, many=True)
+        products = SavingProducts.objects.all()
+        serializer = SavingProductsSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     elif request.method == 'POST':
-        serializer = DepositProductsSerializer(data=request.data)
+        serializer = SavingProductsSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -99,11 +99,11 @@ def deposit_products(request):
         return Response({'message': '이미 있는 데이터이거나, 데이터가 잘못 입력되었습니다.'})
 
 
-# (정기예금)해당 상품의 옵션 리스트 반환
+# (적금)해당 상품의 옵션 리스트 반환
 @api_view(['GET'])
-def deposit_detail(request, fin_prdt_cd):
-    product = get_object_or_404(DepositProducts, fin_prdt_cd=fin_prdt_cd)
-    options = DepositOptions.objects.filter(fin_prdt_cd=product)
-    serializer = DepositOptionsSerializer(options, many=True)
+def saving_detail(request, fin_prdt_cd):
+    product = get_object_or_404(SavingProducts, fin_prdt_cd=fin_prdt_cd)
+    options = SavingOptions.objects.filter(fin_prdt_cd=product)
+    serializer = SavingOptionsSerializer(options, many=True)
     
     return Response(serializer.data)

@@ -2,8 +2,8 @@ from django.db import models
 
 # Create your models here.
 
-# 정기예금 상품정보 모델
-class DepositProducts(models.Model):
+# 적금 상품정보 모델
+class SavingProducts(models.Model):
     fin_prdt_cd = models.TextField(unique=True)  # 금융상품 코드
     fin_prdt_nm = models.TextField()             # 금융 상품명
     kor_co_nm = models.TextField()               # 금융회사 명
@@ -15,9 +15,9 @@ class DepositProducts(models.Model):
     etc_note = models.TextField()                # 기타 유의사항
 
 
-# 정기예금 옵션정보 모델
-class DepositOptions(models.Model):
-    fin_prdt_cd = models.ForeignKey(DepositProducts, on_delete=models.CASCADE)
+# 적금 옵션정보 모델
+class SavingOptions(models.Model):
+    fin_prdt_cd = models.ForeignKey(SavingProducts, on_delete=models.CASCADE)
     intr_rate_type_nm = models.CharField(max_length=100)     # 저축 금리 유형명
     save_trm = models.IntegerField(default=0)                # 저축 기간
     intr_rate = models.FloatField(default=0)                 # 저축 금리

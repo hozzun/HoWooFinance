@@ -6,13 +6,17 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+import logging
 
 # Create your views here.
-
+logger = logging.getLogger(__name__)
 # 사용자 등록(회원가입) 뷰
 class UserRegisterView(RegisterView):
     serializer_class = UserRegisterSerializer
-
+    
+    def create(self, request, *args, **kwargs):
+        logger.debug(f"User registration data: {request.data}")
+        return super().create(request, *args, **kwargs)
 
 # 사용자 로그인 뷰
 class UserLoginView(LoginView):

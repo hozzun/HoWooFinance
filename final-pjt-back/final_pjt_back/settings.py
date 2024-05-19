@@ -47,13 +47,12 @@ REST_AUTH = {
 }
 
 # Application definition
-
 INSTALLED_APPS = [
     # app 목록
     'accounts',   # 유저
     'articles',   # 게시판
-    'deposits',   # 예금
-    # 'savings',    # 적금
+    'deposits',   # 정기예금
+    'savings',    # 적금
     
     # regist 관련
     'django.contrib.sites',
@@ -152,11 +151,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# 한국 시간 변경
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 # 현재 지역대 날짜 시간 설정
 USE_L10N = True
