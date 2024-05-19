@@ -28,7 +28,6 @@ environ.Env.read_env(
 )
 
 API_KEY_DEPOSIT = env('API_KEY_DEPOSIT')
-# API_KEY_MAP = env('API_KEY_MAP')
 
 
 # Quick-start development settings - unsuitable for production
