@@ -1,11 +1,14 @@
 from dj_rest_auth.registration.views import RegisterView
 from dj_rest_auth.views import LoginView, UserDetailsView
+from django.shortcuts import get_object_or_404
 from .serializers import UserSerializer, UserRegisterSerializer, UserLoginSerializer, UserDetailInfoSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from deposits.models import DepositProducts
+from .models import User
 import logging
 
 # Create your views here.

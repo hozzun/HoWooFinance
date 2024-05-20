@@ -6,7 +6,7 @@ from deposits.models import DepositProducts
 
 # 사용자 모델 정의
 class User(AbstractUser):
-    username = models.CharField(max_length=10, unique=True)
+    username = models.CharField(max_length=30, unique=True)
     name = models.CharField(max_length=10, default='unKnown')
     age = models.IntegerField(default=20)
     gender = models.IntegerField(default=1)
@@ -14,4 +14,3 @@ class User(AbstractUser):
     wealth = models.IntegerField(default=0)
     period = models.IntegerField(default=0)
     deposit = models.ManyToManyField(DepositProducts, blank=True, related_name='deposit_joined')
-    # saving = models.ManyToManyField()
