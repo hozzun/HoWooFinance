@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from deposits.models import DepositProducts
+from savings.models import SavingProducts
 from .models import User
 import logging
 
@@ -54,10 +55,60 @@ class UserDetailInfoView(UserDetailsView):
         instance = self.get_object()
         # 기존 데이터와 요청 데이터 사용하여 시리얼라이저 초기화
         serializer = self.get_serializer(instance, data=request.data, partial=kwargs.get('partial', False))
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            logger.error(f"Validation errors: {serializer.errors}")
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         self.perform_update(serializer)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     # 업데이트 데이터 저장
     def perform_update(self, serializer):
         serializer.save()
+
+
+# 정기예금 가입
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_to_deposit(request):
+    user = request.user
+    product_name = request.data.get('product_name')
+    product = get_object_or_404(DepositProducts, fin_prdt_nm=product_name)
+    user.deposit.add(product)
+    user.save()
+    return Response(status=status.HTTP_200_OK)
+
+
+# 정기예금 가입취소
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def remove_from_deposit(request):
+    user = request.user
+    product_code = request.data.get('product_code')
+    product = get_object_or_404(DepositProducts, fin_prdt_cd=product_code)
+    user.deposit.remove(product)
+    user.save()
+    return Response(status=status.HTTP_200_OK)
+
+
+# 적금 가입
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_to_saving(request):
+    user = request.user
+    product_name = request.data.get('product_name')
+    product = get_object_or_404(SavingProducts, fin_prdt_nm=product_name)
+    user.saving.add(product)
+    user.save()
+    return Response(status=status.HTTP_200_OK)
+
+
+# 적금 가입취소
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def remove_from_saving(request):
+    user = request.user
+    product_code = request.data.get('product_code')
+    product = get_object_or_404(SavingProducts, fin_prdt_cd=product_code)
+    user.saving.remove(product)
+    user.save()
+    return Response(status=status.HTTP_200_OK)

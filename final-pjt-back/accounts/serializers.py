@@ -2,13 +2,18 @@ from dj_rest_auth.registration.serializers import RegisterSerializer
 from dj_rest_auth.serializers import LoginSerializer, UserDetailsSerializer
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from deposits.serializers import DepositProductsSerializer
+from savings.serializers import SavingProductsSerializer
 
 
 # 사용자 모델 시리얼라이저
 class UserSerializer(serializers.ModelSerializer):
+    deposit = DepositProductsSerializer(many=True, read_only=True)
+    saving = SavingProductsSerializer(many=True, read_only=True)
+    
     class Meta:
         model = get_user_model()
-        fields = ['pk', 'username', 'name', 'age', 'gender', 'salary', 'wealth', 'period', 'deposit']
+        fields = ('pk', 'username', 'name', 'age', 'gender', 'salary', 'wealth', 'period', 'deposit', 'saving', )
 
 
 # 회원가입 시리얼라이저
@@ -68,8 +73,9 @@ class UserDetailInfoSerializer(UserDetailsSerializer):
     
     class Meta(UserDetailsSerializer.Meta):
         model = get_user_model()
-        fields = ['name', 'age', 'gender', 'salary', 'wealth', 'period', 'deposit']
-
+        fields = ('name', 'age', 'gender', 'salary', 'wealth', 'period', 'deposit', 'saving', )
+        read_only_fields = ('deposit', 'saving')
+        
     # 입력된 데이터 유효성 검사 후 가져오기
     def get_cleaned_data(self):
         data = super().get_cleaned_data()

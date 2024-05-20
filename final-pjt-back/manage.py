@@ -1,3 +1,20 @@
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    return 'Hello, world! This is your chatbot.'
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = request.get_json()
+    message = data['message']
+    # 여기에 챗봇 로직을 구현합니다.
+    response = {'message': f'You said: {message}'}
+    return jsonify(response)
+
+
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
 import os
