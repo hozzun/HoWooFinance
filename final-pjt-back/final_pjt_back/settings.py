@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'articles',   # 게시판
     'deposits',   # 정기예금
     'savings',    # 적금
+    'chatbot',    # 추천(챗봇)
     
     # regist 관련
     'django.contrib.sites',
