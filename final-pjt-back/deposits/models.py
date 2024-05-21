@@ -19,11 +19,11 @@ class DepositProducts(models.Model):
 # 정기예금 옵션정보 모델
 class DepositOptions(models.Model):
     fin_prdt_cd = models.ForeignKey(DepositProducts, on_delete=models.CASCADE)
-    intr_rate_type_nm = models.CharField(max_length=100)     # 저축 금리 유형명
-    save_trm = models.IntegerField(default=0)                # 저축 기간
-    intr_rate = models.FloatField(default=0, null=True, blank=True)                 # 저축 금리
-    intr_rate2 = models.FloatField(default=0, null=True, blank=True)                # 최고 우대금리
+    intr_rate_type_nm = models.CharField(max_length=100)                # 저축 금리 유형명
+    save_trm = models.IntegerField(default=0)                           # 저축 기간
+    intr_rate = models.FloatField(default=0, null=True, blank=True)     # 저축 금리
+    intr_rate2 = models.FloatField(default=0, null=True, blank=True)    # 최고 우대금리
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='user_deposit_options', blank=True)
 
     class Meta:
-        unique_together = ('fin_prdt_cd', 'save_trm')   
+        unique_together = ('fin_prdt_cd', 'save_trm')

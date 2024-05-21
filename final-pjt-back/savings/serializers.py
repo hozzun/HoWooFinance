@@ -10,6 +10,7 @@ class SavingOptionsSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('fin_prdt_cd', )
 
+    # 값 없을 경우 대비
     def validate_intr_rate2(self, value):
         if value is None:
             return 0.0

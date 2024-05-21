@@ -8,7 +8,9 @@ from savings.serializers import SavingProductsSerializer
 
 # 사용자 모델 시리얼라이저
 class UserSerializer(serializers.ModelSerializer):
+    # 해당 유저가 가입한 정기예금
     deposit = serializers.SerializerMethodField()
+    # 해당 유저가 가입한 적금
     saving = serializers.SerializerMethodField()
 
     class Meta:
@@ -65,9 +67,10 @@ class UserRegisterSerializer(RegisterSerializer):
         return user
 
 
-# 로그인 이메일 필드 제거
+# 로그인
 class UserLoginSerializer(LoginSerializer):
     username = serializers.CharField(required=False, allow_null=True)
+    # 이메일 필드제거(username으로 대체)
     email = None
     
 

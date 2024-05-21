@@ -19,10 +19,10 @@ class SavingProducts(models.Model):
 # 적금 옵션정보 모델
 class SavingOptions(models.Model):
     fin_prdt_cd = models.ForeignKey(SavingProducts, on_delete=models.CASCADE)
-    intr_rate_type_nm = models.CharField(max_length=100)     # 저축 금리 유형명
-    save_trm = models.IntegerField(default=0)                # 저축 기간
-    intr_rate = models.FloatField(default=0, null=True, blank=True)                 # 저축 금리
-    intr_rate2 = models.FloatField(default=0, null=True, blank=True)                # 최고 우대금리   
+    intr_rate_type_nm = models.CharField(max_length=100)                # 저축 금리 유형명
+    save_trm = models.IntegerField(default=0)                           # 저축 기간
+    intr_rate = models.FloatField(default=0, null=True, blank=True)     # 저축 금리
+    intr_rate2 = models.FloatField(default=0, null=True, blank=True)    # 최고 우대금리   
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='user_saving_options', blank=True)
 
     class Meta:
