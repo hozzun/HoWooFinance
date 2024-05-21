@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import UserRegisterView, UserLoginView, UserDetailInfoView, user_info, add_to_deposit, remove_from_deposit, add_to_saving, remove_from_saving
+from .views import UserRegisterView, UserLoginView, UserDetailInfoView, user_info, add_to_deposit, remove_from_deposit, add_to_saving, remove_from_saving, get_user_deposit_products, get_user_saving_products
 
 app_name = 'accounts'
 urlpatterns = [
@@ -20,4 +20,8 @@ urlpatterns = [
     path('saving/add/', add_to_saving, name='add_saving'),
     # 적금 가입취소
     path('saving/remove/', remove_from_saving, name='remove_saving'),
+    # 해당 유저의 정기예금 가입 상품조회
+    path('deposit/products/', get_user_deposit_products, name='deposit_product'),
+    # 해당 유저의 적금 가입 상품조회
+    path('deposit/savings/', get_user_saving_products, name='saving_product'),
 ]

@@ -22,8 +22,13 @@ def save_saving_products(request):
         'topFinGrpNo': '020000',
         'pageNo': 1,
     }
-    response = requests.get(URL, params=context).json()
-    base_list = response['result']['baseList']
+    response = requests.get(URL, params=context)
+
+    if response.status_code != 200:
+        return JsonResponse({"error": "Failed to fetch saving products data from external API."}, status=response.status_code)
+
+    response_data = response.json()
+    base_list = response_data.get('result', {}).get('baseList', [])
 
     # product
     for base in base_list:
@@ -40,10 +45,10 @@ def save_saving_products(request):
         }
 
         product_serializer = SavingProductsSerializer(data=save_base_data)
-        if product_serializer.is_valid(raise_exception=True):
+        if product_serializer.is_valid():
             product_serializer.save()
 
-    return JsonResponse({"message": "적금 상품 저장완료."}) 
+    return JsonResponse({"message": "적금 상품 저장완료."})
 
 
 # 적금 상품옵션 DB에 저장
@@ -67,19 +72,27 @@ def save_saving_options(request):
             product = SavingProducts.objects.get(fin_prdt_cd=fin_prdt_cd)
         except SavingProducts.DoesNotExist:
             continue
-        
-        save_option_data = {
-            'intr_rate_type_nm': option.get('intr_rate_type_nm'),
-            'intr_rate': option.get('intr_rate'),
-            'intr_rate2': option.get('intr_rate2'),
-            'save_trm': option.get('save_trm'),
-        }
 
-        option_serializer = SavingOptionsSerializer(data=save_option_data)
-        if option_serializer.is_valid(raise_exception=True):
-            option_serializer.save(fin_prdt_cd=product)
+        # 기존 옵션 삭제
+        existing_option = SavingOptions.objects.filter(fin_prdt_cd=product, save_trm=option.get('save_trm')).first()
+        if existing_option:
+            existing_option.intr_rate_type_nm = option.get('intr_rate_type_nm')
+            existing_option.intr_rate = option.get('intr_rate')
+            existing_option.intr_rate2 = option.get('intr_rate2')
+            existing_option.save()
+        else:
+            save_option_data = {
+                'intr_rate_type_nm': option.get('intr_rate_type_nm'),
+                'intr_rate': option.get('intr_rate'),
+                'intr_rate2': option.get('intr_rate2'),
+                'save_trm': option.get('save_trm'),
+            }
 
-    return JsonResponse({"message": "적금 옵션 저장완료."}) 
+            option_serializer = SavingOptionsSerializer(data=save_option_data)
+            if option_serializer.is_valid(raise_exception=True):
+                option_serializer.save(fin_prdt_cd=product)
+
+    return JsonResponse({"message": "적금 옵션 저장완료."})
 
 
 # (적금)전체 상품 목록 조회 및 추가

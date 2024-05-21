@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from deposits.models import DepositProducts
-from savings.models import SavingProducts
+from deposits.models import DepositProducts, DepositOptions
+from savings.models import SavingProducts, SavingOptions
 
 # Create your models here.
 
@@ -16,3 +16,5 @@ class User(AbstractUser):
     period = models.IntegerField(default=0)
     deposit = models.ManyToManyField(DepositProducts, blank=True, related_name='deposit_joined')
     saving = models.ManyToManyField(SavingProducts, blank=True, related_name='saving_joined')
+    deposit_options = models.ManyToManyField(DepositOptions, blank=True, related_name='user_deposit_options')
+    saving_options = models.ManyToManyField(SavingOptions, blank=True, related_name='users_saving_options')

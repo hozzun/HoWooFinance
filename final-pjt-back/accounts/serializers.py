@@ -8,12 +8,22 @@ from savings.serializers import SavingProductsSerializer
 
 # 사용자 모델 시리얼라이저
 class UserSerializer(serializers.ModelSerializer):
-    deposit = DepositProductsSerializer(many=True, read_only=True)
-    saving = SavingProductsSerializer(many=True, read_only=True)
-    
+    deposit = serializers.SerializerMethodField()
+    saving = serializers.SerializerMethodField()
+
     class Meta:
         model = get_user_model()
-        fields = ('pk', 'username', 'name', 'age', 'gender', 'salary', 'wealth', 'period', 'deposit', 'saving', )
+        fields = ('pk', 'username', 'name', 'age', 'gender', 'salary', 'wealth', 'period', 'deposit', 'saving')
+
+    # 정기예금 상품 옵션 반환
+    def get_deposit(self, obj):
+        request = self.context.get('request')
+        return DepositProductsSerializer(obj.deposit.all(), many=True, context={'request': request}).data
+
+    # 적금 상품 옵션 반환
+    def get_saving(self, obj):
+        request = self.context.get('request')
+        return SavingProductsSerializer(obj.saving.all(), many=True, context={'request': request}).data
 
 
 # 회원가입 시리얼라이저

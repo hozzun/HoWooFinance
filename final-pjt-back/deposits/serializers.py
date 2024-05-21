@@ -18,3 +18,9 @@ class DepositProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = DepositProducts
         fields = '__all__'
+
+    # 해당 정기예금 상품 옵션 같이 묶기
+    def get_deposit_options(self, obj):
+        request = self.context.get('request')
+        user = request.user
+        return DepositOptionsSerializer(obj.depositoptions_set.filter(users=user), many=True).data
