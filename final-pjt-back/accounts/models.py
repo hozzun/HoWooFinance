@@ -13,8 +13,6 @@ class User(AbstractUser):
     name = models.CharField(max_length=10, default='unKnown')
     # 나이
     age = models.IntegerField(default=20)
-    # 성별
-    gender = models.IntegerField(default=1)
     # 연봉
     salary = models.IntegerField(default=0)
     # 희망 금액

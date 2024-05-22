@@ -15,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ('pk', 'username', 'name', 'age', 'gender', 'salary', 'wealth', 'period', 'deposit', 'saving')
+        fields = ('pk', 'username', 'name', 'age', 'salary', 'wealth', 'period', 'deposit', 'saving')
 
     # 정기예금 상품 옵션 반환
     def get_deposit(self, obj):
@@ -33,7 +33,6 @@ class UserRegisterSerializer(RegisterSerializer):
     # 필드 확장
     name = serializers.CharField(required=False, allow_null=True)
     age = serializers.IntegerField(required=False, allow_null=True)
-    gender = serializers.IntegerField(required=False, allow_null=True)
     salary = serializers.IntegerField(required=False, allow_null=True)
     wealth = serializers.IntegerField(required=False, allow_null=True)
     period = serializers.IntegerField(required=False, allow_null=True)
@@ -47,7 +46,6 @@ class UserRegisterSerializer(RegisterSerializer):
         data.update({
             'name': self.validated_data.get('name', None),
             'age': self.validated_data.get('age', None),
-            'gender': self.validated_data.get('gender', None),
             'salary': self.validated_data.get('salary', None),
             'wealth': self.validated_data.get('wealth', None),
             'period': self.validated_data.get('period', None),
@@ -59,7 +57,6 @@ class UserRegisterSerializer(RegisterSerializer):
         user = super().save(request)
         user.name = self.validated_data.get('name')
         user.age = self.validated_data.get('age')
-        user.gender = self.validated_data.get('gender')
         user.salary = self.validated_data.get('salary')
         user.wealth = self.validated_data.get('wealth')
         user.period = self.validated_data.get('period')
@@ -79,14 +76,13 @@ class UserDetailInfoSerializer(UserDetailsSerializer):
     # 필드 확장
     name = serializers.CharField(required=False, allow_null=True)
     age = serializers.CharField(required=False, allow_null=True)
-    gender = serializers.CharField(required=False, allow_null=True)
     salary = serializers.CharField(required=False, allow_null=True)
     wealth = serializers.CharField(required=False, allow_null=True)
     period = serializers.CharField(required=False, allow_null=True)
     
     class Meta(UserDetailsSerializer.Meta):
         model = get_user_model()
-        fields = ('name', 'age', 'gender', 'salary', 'wealth', 'period', 'deposit', 'saving', )
+        fields = ('name', 'age', 'salary', 'wealth', 'period', 'deposit', 'saving', )
         read_only_fields = ('deposit', 'saving')
         
     # 입력된 데이터 유효성 검사 후 가져오기
@@ -95,7 +91,6 @@ class UserDetailInfoSerializer(UserDetailsSerializer):
         data.update({
             'name': self.validated_data.get('name', None),
             'age': self.validated_data.get('age', None),
-            'gender': self.validated_data.get('gender', None),
             'salary': self.validated_data.get('salary', None),
             'wealth': self.validated_data.get('wealth', None),
             'period': self.validated_data.get('period', None),
@@ -107,7 +102,6 @@ class UserDetailInfoSerializer(UserDetailsSerializer):
         instance = super().update(instance, validated_data)
         instance.name = validated_data.get('name', None)
         instance.age = validated_data.get('age', None)
-        instance.gender = validated_data.get('gender', None)
         instance.salary = validated_data.get('salary', None)
         instance.wealth = validated_data.get('wealth', None)
         instance.period = validated_data.get('period', None)
