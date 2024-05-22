@@ -11,26 +11,36 @@ def recommend(request):
     try:
         user_message = request.POST.get('message', '')
 
+        # Fetching the top 5 deposit and saving products
+        deposits = list(Deposit.objects.values('fin_prdt_nm', 'mtrt_int', 'fin_prdt_cd')[:5])
+        savings = list(Saving.objects.values('fin_prdt_nm', 'mtrt_int', 'fin_prdt_cd')[:5])
+
+        # Create a list of product descriptions for the prompt
+        deposit_descriptions = "\n".join(
+            [f"{d['fin_prdt_nm']}: 금리 {d['mtrt_int']}%, <a href='http://localhost:5173/products/{d['fin_prdt_cd']}/deposit' target='_blank'>상세정보 보기</a>"
+             for d in deposits]
+        )
+        saving_descriptions = "\n".join(
+            [f"{s['fin_prdt_nm']}: 금리 {s['mtrt_int']}%, <a href='http://localhost:5173/products/{s['fin_prdt_cd']}/saving' target='_blank'>상세정보 보기</a>"
+             for s in savings]
+        )
+
+        # Construct the prompt for GPT
         prompt = f"""
         사용자가 다음과 같은 정보를 제공했습니다:
         "{user_message}"
 
-        사용자가 제공한 정보에 따라 가장 적합한 예금 또는 적금 상품을 추천해 주세요. 조건에 맞는 상품을 선택하고, 금리가 높은 상품을 우선으로 추천해 주세요. 사용 가능한 상품은 다음과 같습니다:
+        사용자의 정보와 조건에 맞는 가장 적합한 예금 또는 적금 상품을 추천해 주세요. 
+        아래는 추천 가능한 예금 및 적금 상품 목록입니다:
 
         예금:
+        {deposit_descriptions}
+
+        적금:
+        {saving_descriptions}
         """
-        
-        deposits = list(Deposit.objects.values('fin_prdt_nm', 'mtrt_int', 'fin_prdt_cd')[:5])
-        savings = list(Saving.objects.values('fin_prdt_nm', 'mtrt_int', 'fin_prdt_cd')[:5])
 
-        for deposit in deposits:
-            prompt += f"정기예금: {deposit['fin_prdt_nm']}, 금리: {deposit['mtrt_int']}%, 상세정보: <a href='http://localhost:5173/products/{deposit['fin_prdt_cd']}/deposit' target='_blank'>링크</a>\n"
-        
-        prompt += "\n적금:\n"
-
-        for saving in savings:
-            prompt += f"적금: {saving['fin_prdt_nm']}, 금리: {saving['mtrt_int']}%, 상세정보: <a href='http://localhost:5173/products/{saving['fin_prdt_cd']}/saving' target='_blank'>링크</a>\n"
-
+        # Generate a recommendation using GPT-3.5-turbo
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
