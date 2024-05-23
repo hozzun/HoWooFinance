@@ -1,0 +1,5 @@
+@import url('//fastly.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css');
+
+body, button, input, select, textarea {
+  font-family: 'Iropke Batang', 'Noto Sans KR', sans-serif;
+}

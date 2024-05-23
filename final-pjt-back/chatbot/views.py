@@ -1,3 +1,4 @@
+import json
 import openai
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -9,7 +10,13 @@ openai.api_key = ''
 @csrf_exempt
 def recommend(request):
     try:
-        user_message = request.POST.get('message', '')
+        if request.method != 'POST':
+            return JsonResponse({'error': 'Invalid request method'}, status=400)
+        
+        body = json.loads(request.body.decode('utf-8'))
+        user_message = body.get('message', '').strip()
+        if not user_message:
+            return JsonResponse({'error': 'No user message provided'}, status=400)
 
         # Fetching the top 5 deposit and saving products
         deposits = list(Deposit.objects.values('fin_prdt_nm', 'mtrt_int', 'fin_prdt_cd')[:5])
