@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from deposits.models import DepositProducts as Deposit
 from savings.models import SavingProducts as Saving
 
-openai.api_key = ''
+# openai.api_key = ''
 
 @csrf_exempt
 def recommend(request):

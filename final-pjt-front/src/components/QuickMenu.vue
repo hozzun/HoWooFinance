@@ -11,6 +11,7 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { useCounterStore } from '@/stores/counter';
+import axios from 'axios'; // axios를 import 합니다.
 
 const router = useRouter();
 const store = useCounterStore();
@@ -54,7 +55,7 @@ const handleClick = (num) => {
   }
 }
 
-const uploadData = () => {
+const uploadData = async () => {
   const urls = [
     `${store.baseURL}/deposits/save_products/`,
     `${store.baseURL}/deposits/save_options/`,
@@ -62,25 +63,24 @@ const uploadData = () => {
     `${store.baseURL}/savings/save_options/`
   ];
 
-  const requests = urls.map(url => 
-    axios({
-      method: 'get',
-      url: url,
-      headers: {
-        Authorization: `Token ${store.token}`
-      }
-    })
-  );
-
-  Promise.all(requests)
-    .then(() => {
-      console.log('save success');
-      window.alert('예적금 상품 데이터가 저장되었습니다.');
-    })
-    .catch((error) => {
-      console.error('save fail', error);
-      window.alert('예적금 상품 데이터 저장에 실패하였습니다.');
-    });
+  try {
+    await Promise.all(
+      urls.map(url => 
+        axios({
+          method: 'get',
+          url: url,
+          headers: {
+            Authorization: `Token ${store.token}`
+          }
+        })
+      )
+    );
+    console.log('save success');
+    window.alert('예적금 상품 데이터가 저장되었습니다.');
+  } catch (error) {
+    console.error('save fail', error);
+    window.alert('예적금 상품 데이터 저장에 실패하였습니다.');
+  }
 }
 </script>
 

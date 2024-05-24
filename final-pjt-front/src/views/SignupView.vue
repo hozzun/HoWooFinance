@@ -162,7 +162,7 @@ const signUp = async function () {
 </script>
 
 <style scoped>
-/* @import url('https://use.fontawesome.com/releases/v5.0.8/css/all.css'); */
+@import url('https://use.fontawesome.com/releases/v5.0.8/css/all.css');
 
 .signup-container {
   max-width: 550px; /* 폼 컨테이너의 최대 너비 설정 */

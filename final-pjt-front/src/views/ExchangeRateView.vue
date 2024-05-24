@@ -88,7 +88,7 @@ export default {
         const currentResponse = await axios.get(`/api/site/program/financial/exchangeJSON`, {
           params: {
             authkey: '', // APIKEY
-            searchdate: '20240521', // 현재 날짜
+            searchdate: '20240524', // 현재 날짜
             data: 'AP01'
           }
         });
@@ -96,7 +96,7 @@ export default {
         const previousResponse = await axios.get(`/api/site/program/financial/exchangeJSON`, {
           params: {
             authkey: '', // APIKEY
-            searchdate: '20240509', // 전일 날짜
+            searchdate: '20240524', // 전일 날짜
             data: 'AP01'
           }
         });
