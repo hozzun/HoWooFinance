@@ -4,7 +4,7 @@
 - 주제 : 사용자 정보 분석하여 최적의 예적금 상품 비교 및 추천 사이트
 - 서비스명 : ***HoWoo Finance***
 
-## 기술스택
+## 💻 기술스택
 
 +  <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white">
 +  <img src="https://img.shields.io/badge/django-092E20?style=for-the-badge&logo=django&logoColor=white">
